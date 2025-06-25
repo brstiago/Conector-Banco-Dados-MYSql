@@ -11,7 +11,7 @@ namespace ConectorSGLinx
     {
         //Caminho do arquivo INI
         private readonly string path;
-        private string[] lines;
+       //private string[] lines;
 
         //Construtor que recebe o caminho do arquivo .INI
         public IniFile(string iniPath)
