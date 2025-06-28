@@ -20,5 +20,6 @@ Além de resolver um problema real, esse projeto foi uma ótima oportunidade pra
 
 👨‍💻 E o mais importante: mais um passo na minha jornada de evolução contínua na área de desenvolvimento de software!
 
-![image](https://github.com/user-attachments/assets/2b863f11-b977-4f14-9b8d-9ef28680b0d9)
+![image](https://github.com/user-attachments/assets/3fd89ca0-2e37-43f7-81fb-03e6410b0e61)
+
 
