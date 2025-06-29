@@ -17,9 +17,7 @@ Além de resolver um problema real, esse projeto foi uma ótima oportunidade pra
 🧑‍💻 WinForms
 🧑‍💻 Conexão com MySQL em C#
 🧑‍💻 Melhores práticas de UX para ferramentas internas
+🧑‍💻 Utilização de biblioteca MaterialSkin2 para os componentes de tela
 
 👨‍💻 E o mais importante: mais um passo na minha jornada de evolução contínua na área de desenvolvimento de software!
-
-![image](https://github.com/user-attachments/assets/3fd89ca0-2e37-43f7-81fb-03e6410b0e61)
-
-
+![image](https://github.com/user-attachments/assets/3abc029f-5940-4ef3-ad1e-321139aa8003)
