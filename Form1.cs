@@ -20,6 +20,7 @@ using System.Configuration;
 using System.Drawing.Drawing2D;
 using MaterialSkin;
 using MaterialSkin.Controls;
+using System.IO;
 //using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Conector_Banco_de_Dados
@@ -72,7 +73,15 @@ namespace Conector_Banco_de_Dados
         private MaterialRadioButton radioConexaoAtiva;
         private MaterialRadioButton radioCaminhoRel;
         private MaterialRadioButton radioProvider;
+        private PictureBox pictureBox1;
+        private MaterialMaskedTextBox txtboxBaseConhecimento;
         public string nomeBanco;
+        private NotifyIcon notifyIconFrm1;
+        private ContextMenuStrip ctx_msts_Frm1;
+        private ToolStripMenuItem tsmi_Restaurar;
+        private ToolStripMenuItem tsmi_Fechar;
+        public string novoBancoIni;
+        //public string novoBDsenvIni;
 
         public Form1()
         {
@@ -92,6 +101,7 @@ namespace Conector_Banco_de_Dados
             this.swtUtilizaMyIsam = new MaterialSkin.Controls.MaterialSwitch();
             this.txtSenhaSQL = new System.Windows.Forms.TextBox();
             this.txtUserSQL = new System.Windows.Forms.TextBox();
+            this.btnRecarregar = new MaterialSkin.Controls.MaterialButton();
             this.lblSenhaSQL = new System.Windows.Forms.Label();
             this.lblUserSQL = new System.Windows.Forms.Label();
             this.btnExecutarViews = new MaterialSkin.Controls.MaterialButton();
@@ -102,6 +112,7 @@ namespace Conector_Banco_de_Dados
             this.comboBoxBDesenv = new MaterialSkin.Controls.MaterialComboBox();
             this.btnGravar = new MaterialSkin.Controls.MaterialButton();
             this.lblbdsenv = new System.Windows.Forms.Label();
+            this.btnRecarregaMySQL = new MaterialSkin.Controls.MaterialButton();
             this.groupBoxParAtual = new System.Windows.Forms.GroupBox();
             this.radioButtonBdesenv = new MaterialSkin.Controls.MaterialRadioButton();
             this.radioConexaoAtiva = new MaterialSkin.Controls.MaterialRadioButton();
@@ -113,9 +124,13 @@ namespace Conector_Banco_de_Dados
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.progressBarLoad = new System.Windows.Forms.ProgressBar();
             this.pictureBoxLinear = new System.Windows.Forms.PictureBox();
-            this.btnRecarregaMySQL = new MaterialSkin.Controls.MaterialButton();
-            this.btnRecarregar = new MaterialSkin.Controls.MaterialButton();
             this.btnSair = new MaterialSkin.Controls.MaterialButton();
+            this.txtboxBaseConhecimento = new MaterialSkin.Controls.MaterialMaskedTextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.notifyIconFrm1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.ctx_msts_Frm1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmi_Restaurar = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi_Fechar = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxMySQL.SuspendLayout();
             this.groupCreateMySQL.SuspendLayout();
             this.groupBoxIni.SuspendLayout();
@@ -123,6 +138,8 @@ namespace Conector_Banco_de_Dados
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAjuda)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLinear)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.ctx_msts_Frm1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxMySQL
@@ -131,6 +148,7 @@ namespace Conector_Banco_de_Dados
             this.groupBoxMySQL.Controls.Add(this.groupCreateMySQL);
             this.groupBoxMySQL.Controls.Add(this.txtSenhaSQL);
             this.groupBoxMySQL.Controls.Add(this.txtUserSQL);
+            this.groupBoxMySQL.Controls.Add(this.btnRecarregar);
             this.groupBoxMySQL.Controls.Add(this.lblSenhaSQL);
             this.groupBoxMySQL.Controls.Add(this.lblUserSQL);
             this.groupBoxMySQL.Controls.Add(this.btnExecutarViews);
@@ -267,6 +285,27 @@ namespace Conector_Banco_de_Dados
             this.toolTip1.SetToolTip(this.txtUserSQL, "Deve ser configurado um usuário Root no MySQL.");
             this.txtUserSQL.TextChanged += new System.EventHandler(this.txtUserSQL_TextChanged);
             // 
+            // btnRecarregar
+            // 
+            this.btnRecarregar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnRecarregar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnRecarregar.Depth = 0;
+            this.btnRecarregar.HighEmphasis = true;
+            this.btnRecarregar.Icon = null;
+            this.btnRecarregar.Location = new System.Drawing.Point(184, 344);
+            this.btnRecarregar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnRecarregar.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnRecarregar.Name = "btnRecarregar";
+            this.btnRecarregar.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnRecarregar.Size = new System.Drawing.Size(96, 36);
+            this.btnRecarregar.TabIndex = 11;
+            this.btnRecarregar.Text = "Cancelar";
+            this.toolTip1.SetToolTip(this.btnRecarregar, "Restaura as configurações padrões");
+            this.btnRecarregar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnRecarregar.UseAccentColor = false;
+            this.btnRecarregar.UseVisualStyleBackColor = true;
+            this.btnRecarregar.Click += new System.EventHandler(this.btnRecarregar_Click_1);
+            // 
             // lblSenhaSQL
             // 
             this.lblSenhaSQL.AutoSize = true;
@@ -316,6 +355,7 @@ namespace Conector_Banco_de_Dados
             this.lblMySQLCarregado.Size = new System.Drawing.Size(153, 15);
             this.lblMySQLCarregado.TabIndex = 5;
             this.lblMySQLCarregado.Text = "MySQL Não Carregado";
+            this.lblMySQLCarregado.Click += new System.EventHandler(this.lblMySQLCarregado_Click);
             // 
             // lblBancoDados
             // 
@@ -334,6 +374,7 @@ namespace Conector_Banco_de_Dados
             this.groupBoxIni.Controls.Add(this.comboBoxBDesenv);
             this.groupBoxIni.Controls.Add(this.btnGravar);
             this.groupBoxIni.Controls.Add(this.lblbdsenv);
+            this.groupBoxIni.Controls.Add(this.btnRecarregaMySQL);
             this.groupBoxIni.Controls.Add(this.lblBancoDados);
             this.groupBoxIni.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBoxIni.Location = new System.Drawing.Point(4, 237);
@@ -420,6 +461,27 @@ namespace Conector_Banco_de_Dados
             this.lblbdsenv.Size = new System.Drawing.Size(55, 13);
             this.lblbdsenv.TabIndex = 1;
             this.lblbdsenv.Text = "bdesenv";
+            // 
+            // btnRecarregaMySQL
+            // 
+            this.btnRecarregaMySQL.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnRecarregaMySQL.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnRecarregaMySQL.Depth = 0;
+            this.btnRecarregaMySQL.HighEmphasis = true;
+            this.btnRecarregaMySQL.Icon = null;
+            this.btnRecarregaMySQL.Location = new System.Drawing.Point(182, 174);
+            this.btnRecarregaMySQL.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnRecarregaMySQL.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnRecarregaMySQL.Name = "btnRecarregaMySQL";
+            this.btnRecarregaMySQL.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnRecarregaMySQL.Size = new System.Drawing.Size(114, 36);
+            this.btnRecarregaMySQL.TabIndex = 7;
+            this.btnRecarregaMySQL.Text = "Recarregar";
+            this.toolTip1.SetToolTip(this.btnRecarregaMySQL, "Utilize quando incluir novos bancos");
+            this.btnRecarregaMySQL.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnRecarregaMySQL.UseAccentColor = false;
+            this.btnRecarregaMySQL.UseVisualStyleBackColor = true;
+            this.btnRecarregaMySQL.Click += new System.EventHandler(this.btnRecarregaMySQL_Click_1);
             // 
             // groupBoxParAtual
             // 
@@ -519,7 +581,7 @@ namespace Conector_Banco_de_Dados
             // pictureBoxAjuda
             // 
             this.pictureBoxAjuda.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxAjuda.Image")));
-            this.pictureBoxAjuda.Location = new System.Drawing.Point(693, 462);
+            this.pictureBoxAjuda.Location = new System.Drawing.Point(823, 120);
             this.pictureBoxAjuda.Name = "pictureBoxAjuda";
             this.pictureBoxAjuda.Size = new System.Drawing.Size(27, 26);
             this.pictureBoxAjuda.TabIndex = 6;
@@ -558,66 +620,26 @@ namespace Conector_Banco_de_Dados
             // pictureBoxLinear
             // 
             this.pictureBoxLinear.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxLinear.Image")));
-            this.pictureBoxLinear.Location = new System.Drawing.Point(288, 28);
+            this.pictureBoxLinear.Location = new System.Drawing.Point(335, 28);
             this.pictureBoxLinear.Name = "pictureBoxLinear";
             this.pictureBoxLinear.Size = new System.Drawing.Size(37, 33);
             this.pictureBoxLinear.TabIndex = 9;
             this.pictureBoxLinear.TabStop = false;
             this.toolTip1.SetToolTip(this.pictureBoxLinear, "Produto não oficial");
             // 
-            // btnRecarregaMySQL
-            // 
-            this.btnRecarregaMySQL.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnRecarregaMySQL.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btnRecarregaMySQL.Depth = 0;
-            this.btnRecarregaMySQL.HighEmphasis = true;
-            this.btnRecarregaMySQL.Icon = null;
-            this.btnRecarregaMySQL.Location = new System.Drawing.Point(606, 330);
-            this.btnRecarregaMySQL.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnRecarregaMySQL.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnRecarregaMySQL.Name = "btnRecarregaMySQL";
-            this.btnRecarregaMySQL.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnRecarregaMySQL.Size = new System.Drawing.Size(114, 36);
-            this.btnRecarregaMySQL.TabIndex = 7;
-            this.btnRecarregaMySQL.Text = "Recarregar";
-            this.toolTip1.SetToolTip(this.btnRecarregaMySQL, "Utilize quando incluir novos bancos");
-            this.btnRecarregaMySQL.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btnRecarregaMySQL.UseAccentColor = false;
-            this.btnRecarregaMySQL.UseVisualStyleBackColor = true;
-            this.btnRecarregaMySQL.Click += new System.EventHandler(this.btnRecarregaMySQL_Click_1);
-            // 
-            // btnRecarregar
-            // 
-            this.btnRecarregar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btnRecarregar.Depth = 0;
-            this.btnRecarregar.HighEmphasis = true;
-            this.btnRecarregar.Icon = null;
-            this.btnRecarregar.Location = new System.Drawing.Point(606, 374);
-            this.btnRecarregar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnRecarregar.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnRecarregar.Name = "btnRecarregar";
-            this.btnRecarregar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnRecarregar.Size = new System.Drawing.Size(113, 36);
-            this.btnRecarregar.TabIndex = 11;
-            this.btnRecarregar.Text = "Cancelar";
-            this.toolTip1.SetToolTip(this.btnRecarregar, "Restaura as configurações padrões");
-            this.btnRecarregar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btnRecarregar.UseAccentColor = false;
-            this.btnRecarregar.UseVisualStyleBackColor = true;
-            this.btnRecarregar.Click += new System.EventHandler(this.btnRecarregar_Click_1);
-            // 
             // btnSair
             // 
+            this.btnSair.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnSair.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.btnSair.Depth = 0;
             this.btnSair.HighEmphasis = true;
             this.btnSair.Icon = null;
-            this.btnSair.Location = new System.Drawing.Point(606, 411);
+            this.btnSair.Location = new System.Drawing.Point(694, 454);
             this.btnSair.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnSair.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnSair.Name = "btnSair";
             this.btnSair.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnSair.Size = new System.Drawing.Size(113, 36);
+            this.btnSair.Size = new System.Drawing.Size(64, 36);
             this.btnSair.TabIndex = 12;
             this.btnSair.Text = "Sair";
             this.toolTip1.SetToolTip(this.btnSair, "Encerra o app com segurança");
@@ -626,14 +648,95 @@ namespace Conector_Banco_de_Dados
             this.btnSair.UseVisualStyleBackColor = true;
             this.btnSair.Click += new System.EventHandler(this.materialButton2_Click);
             // 
+            // txtboxBaseConhecimento
+            // 
+            this.txtboxBaseConhecimento.AllowPromptAsInput = true;
+            this.txtboxBaseConhecimento.AnimateReadOnly = false;
+            this.txtboxBaseConhecimento.AsciiOnly = false;
+            this.txtboxBaseConhecimento.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.txtboxBaseConhecimento.BeepOnError = false;
+            this.txtboxBaseConhecimento.CutCopyMaskFormat = System.Windows.Forms.MaskFormat.IncludeLiterals;
+            this.txtboxBaseConhecimento.Depth = 0;
+            this.txtboxBaseConhecimento.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txtboxBaseConhecimento.HidePromptOnLeave = false;
+            this.txtboxBaseConhecimento.HideSelection = true;
+            this.txtboxBaseConhecimento.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.txtboxBaseConhecimento.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Default;
+            this.txtboxBaseConhecimento.LeadingIcon = null;
+            this.txtboxBaseConhecimento.Location = new System.Drawing.Point(603, 117);
+            this.txtboxBaseConhecimento.Mask = "";
+            this.txtboxBaseConhecimento.MaxLength = 32767;
+            this.txtboxBaseConhecimento.MouseState = MaterialSkin.MouseState.OUT;
+            this.txtboxBaseConhecimento.Name = "txtboxBaseConhecimento";
+            this.txtboxBaseConhecimento.PasswordChar = '\0';
+            this.txtboxBaseConhecimento.PrefixSuffixText = null;
+            this.txtboxBaseConhecimento.PromptChar = '_';
+            this.txtboxBaseConhecimento.ReadOnly = false;
+            this.txtboxBaseConhecimento.RejectInputOnFirstFailure = false;
+            this.txtboxBaseConhecimento.ResetOnPrompt = true;
+            this.txtboxBaseConhecimento.ResetOnSpace = true;
+            this.txtboxBaseConhecimento.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.txtboxBaseConhecimento.SelectedText = "";
+            this.txtboxBaseConhecimento.SelectionLength = 0;
+            this.txtboxBaseConhecimento.SelectionStart = 0;
+            this.txtboxBaseConhecimento.ShortcutsEnabled = true;
+            this.txtboxBaseConhecimento.Size = new System.Drawing.Size(250, 48);
+            this.txtboxBaseConhecimento.SkipLiterals = true;
+            this.txtboxBaseConhecimento.TabIndex = 14;
+            this.txtboxBaseConhecimento.TabStop = false;
+            this.txtboxBaseConhecimento.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtboxBaseConhecimento.TextMaskFormat = System.Windows.Forms.MaskFormat.IncludeLiterals;
+            this.toolTip1.SetToolTip(this.txtboxBaseConhecimento, "Digite um tema pra buscar na Base de Conhecimento");
+            this.txtboxBaseConhecimento.TrailingIcon = null;
+            this.txtboxBaseConhecimento.UseSystemPasswordChar = false;
+            this.txtboxBaseConhecimento.ValidatingType = null;
+            this.txtboxBaseConhecimento.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtboxBaseConhecimento_KeyDown);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(603, 74);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(247, 37);
+            this.pictureBox1.TabIndex = 13;
+            this.pictureBox1.TabStop = false;
+            // 
+            // notifyIconFrm1
+            // 
+            this.notifyIconFrm1.ContextMenuStrip = this.ctx_msts_Frm1;
+            this.notifyIconFrm1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIconFrm1.Icon")));
+            this.notifyIconFrm1.Text = "notifyIcon1";
+            this.notifyIconFrm1.Visible = true;
+            this.notifyIconFrm1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIconFrm1_MouseDoubleClick);
+            // 
+            // ctx_msts_Frm1
+            // 
+            this.ctx_msts_Frm1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmi_Restaurar,
+            this.tsmi_Fechar});
+            this.ctx_msts_Frm1.Name = "ctx_msts_Frm1";
+            this.ctx_msts_Frm1.Size = new System.Drawing.Size(127, 48);
+            this.ctx_msts_Frm1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ctx_msts_Frm1_ItemClicked);
+            // 
+            // tsmi_Restaurar
+            // 
+            this.tsmi_Restaurar.Name = "tsmi_Restaurar";
+            this.tsmi_Restaurar.Size = new System.Drawing.Size(180, 22);
+            this.tsmi_Restaurar.Text = "Restaurar ";
+            // 
+            // tsmi_Fechar
+            // 
+            this.tsmi_Fechar.Name = "tsmi_Fechar";
+            this.tsmi_Fechar.Size = new System.Drawing.Size(180, 22);
+            this.tsmi_Fechar.Text = "Fechar";
+            // 
             // Form1
             // 
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(726, 494);
+            this.ClientSize = new System.Drawing.Size(856, 494);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnSair);
-            this.Controls.Add(this.btnRecarregar);
-            this.Controls.Add(this.btnRecarregaMySQL);
             this.Controls.Add(this.pictureBoxAjuda);
             this.Controls.Add(this.pictureBoxLinear);
             this.Controls.Add(this.linklblGitHub);
@@ -641,12 +744,15 @@ namespace Conector_Banco_de_Dados
             this.Controls.Add(this.groupBoxIni);
             this.Controls.Add(this.groupBoxMySQL);
             this.Controls.Add(this.progressBarLoad);
+            this.Controls.Add(this.txtboxBaseConhecimento);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Sizable = false;
-            this.Text = "Central de Configurações .INI";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Central de Configurações SGLinear";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Resize += new System.EventHandler(this.Form1_Resize);
             this.groupBoxMySQL.ResumeLayout(false);
             this.groupBoxMySQL.PerformLayout();
             this.groupCreateMySQL.ResumeLayout(false);
@@ -658,6 +764,8 @@ namespace Conector_Banco_de_Dados
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAjuda)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLinear)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.ctx_msts_Frm1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -679,6 +787,8 @@ namespace Conector_Banco_de_Dados
                 TextShade.WHITE         // Cor do texto
                 );
 
+            lblMySQLCarregado.Text = "MySQL Carregando...";
+            lblMySQLCarregado.ForeColor = Color.BlueViolet;
             progressBarLoad.Minimum = 0;
                     progressBarLoad.Maximum = 150;
                     progressBarLoad.Value = 0;
@@ -735,7 +845,7 @@ namespace Conector_Banco_de_Dados
                 {
                     txtUserSQL.Text = "";
                     txtSenhaSQL.Text = "";
-                    lblBancoDados.Text = "Erro ao Carregar";
+                    lblMySQLCarregado.Text = "Erro ao carregar MySQL";
                     lblMySQLCarregado.ForeColor = Color.OrangeRed;
                     return;
                 }
@@ -789,25 +899,6 @@ namespace Conector_Banco_de_Dados
             }
         }
         //Função para Recarregar os dados da tela
-        private void btnRecarregar_Click(object sender, EventArgs e)
-        {
-            comboBoxBancos.Text = "";
-            comboBoxBDesenv.Text = "";
-            lblBancoDados.Text = "MySQL Carregado";
-            lblMySQLCarregado.ForeColor = Color.LightGoldenrodYellow;
-
-            swtEstReservado.Checked = false;
-            swtEstReservadoItens.Checked = false;
-            swtUtilizaInnodb.Checked = false;
-            swtUtilizaMyIsam.Checked = false;
-
-            provider = ini.Read("Provider");
-            bancoAtual = ini.Read("nomebanco");
-            bdesenv = ini.Read("bdesenv");
-            caminhorel = ini.Read("Caminhorel");
-        }
-
-        //Função para Confirmar as alterações no arquivo .INI
         private void btnGravar_Click_1(object sender, EventArgs e)
         {
             try
@@ -816,17 +907,16 @@ namespace Conector_Banco_de_Dados
                 string novoBancoIni = comboBoxBancos.SelectedItem?.ToString();
                 string novoBDsenvIni = comboBoxBDesenv.SelectedItem?.ToString();
 
-                    //Testa qua opção está selecionada e preenchida - Verifica se Banco
+                // Validação pra verificar se os campos estão selecionados
                 if (string.IsNullOrEmpty(novoBancoIni))
                 {
                     novoBancoIni = ini.Read("nomebanco");
                 }
-                //Testa qua opção está selecionada e preenchida - Verifica se Bdsenv
                 if (string.IsNullOrEmpty(novoBDsenvIni))
                 {
                     novoBDsenvIni = ini.Read("bdesenv");
-                return;
-            }
+                    return;
+                }
                 //Validação das Informações
                 if (radioButtonBdesenv.Checked && string.IsNullOrEmpty(comboBoxBDesenv.SelectedItem?.ToString()))
                 {
@@ -857,6 +947,7 @@ namespace Conector_Banco_de_Dados
                 MessageBox.Show($"Erro ao gravar as configurações:{ex.Message}");
             }
         }
+    
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 
@@ -959,6 +1050,7 @@ namespace Conector_Banco_de_Dados
                             int linhasAfetadas = cmd.ExecuteNonQuery();
                             MessageBox.Show($"{swtEstReservado.Text} crida com sucesso!");
                         }
+                        swtEstReservado.Checked = false;
                     }
 
                     if (swtEstReservadoItens.Checked)
@@ -969,6 +1061,7 @@ namespace Conector_Banco_de_Dados
                             int linhasAfetadas = cmd.ExecuteNonQuery();
                             MessageBox.Show($"{swtEstReservadoItens.Text} crida com sucesso!");
                         }
+                        swtEstReservadoItens.Checked = false;
                     }
 
                     if (swtUtilizaMyIsam.Checked)
@@ -979,6 +1072,7 @@ namespace Conector_Banco_de_Dados
                             int linhasAfetadas = cmd.ExecuteNonQuery();
                             MessageBox.Show($"Parâmetro {swtUtilizaMyIsam.Text} atualizado com sucesso! Linhas afetadas: {linhasAfetadas}");
                         }
+                        swtUtilizaMyIsam.Checked = false;
                     }
 
                     if (swtUtilizaInnodb.Checked)
@@ -989,7 +1083,8 @@ namespace Conector_Banco_de_Dados
                             int linhasAfetadas = cmd.ExecuteNonQuery();
                             MessageBox.Show($"Parâmetro {swtUtilizaInnodb.Text} atualizado com sucesso! Linhas afetadas: {linhasAfetadas}");
                         }
-                        }
+                        swtUtilizaInnodb.Checked = false;
+                    }
 
                     if (swtUserLinear.Checked)
                     {
@@ -1023,6 +1118,7 @@ namespace Conector_Banco_de_Dados
                             MessageBox.Show($"Senha 123 aplicada para os usuários: {nomes}. " +
                                                      $"Linhas afetadas: {linhasAfetadas}.");
                         }
+                        swtUserLinear.Checked = false;
                     }
                 }   
             }
@@ -1065,21 +1161,13 @@ namespace Conector_Banco_de_Dados
         }
         private void btnRecarregar_Click_1(object sender, EventArgs e)
         {
-            comboBoxBancos.Text = "";
-            comboBoxBDesenv.Text = "";
-            lblBancoDados.Text = "MySQL Carregado";
-            lblMySQLCarregado.ForeColor = Color.LightGoldenrodYellow;
-
-
             swtEstReservado.Checked = false;
             swtEstReservadoItens.Checked = false;
             swtUtilizaInnodb.Checked = false;
             swtUtilizaMyIsam.Checked = false;
-
-            provider = ini.Read("Provider");
-            bancoAtual = ini.Read("nomebanco");
-            bdesenv = ini.Read("bdesenv");
-            caminhorel = ini.Read("Caminhorel");
+            swtUserLinear.Checked = false;
+            txtUserSQL.Text = "teste";
+            txtSenhaSQL.Text = "123";
         }
         private void swtUtilizaMyIsam_CheckedChanged(object sender, EventArgs e)
         {
@@ -1098,5 +1186,76 @@ namespace Conector_Banco_de_Dados
         {
         }
 
+        private void txtboxBaseConhecimento_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+            {
+                e.SuppressKeyPress = true; // evita "bip" do ENTER
+                string busca = txtboxBaseConhecimento.Text.Trim();
+
+                if (!string.IsNullOrEmpty(busca))
+                {
+                    string url = "https://linearsistemas.movidesk.com/kb/pt-br/Search?q=" + Uri.EscapeDataString(busca);
+                    System.Diagnostics.Process.Start(url);
+                }
+                txtboxBaseConhecimento.Text = "";
+            }
+        }
+
+        private void lblMySQLCarregado_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //Metódos para controlar o ícone na barra de tarefas e notificação
+        private void ctx_msts_Frm1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem.Name == "tsmi_Fechar")
+            {
+                if (conn != null && conn.State == ConnectionState.Open)
+                    conn.Close();  // Encerra a conexão com o MySQL
+
+                Application.Exit(); // Encerra toda a aplicação
+            }
+            else if (e.ClickedItem.Name == "tsmi_Restaurar")
+            {
+                this.Show();                                   // Mostra o form
+                this.WindowState = FormWindowState.Normal;    // Garante estado normal
+                this.ShowInTaskbar = true;                   // Volta para a barra de tarefas
+                this.BringToFront();                        // Traz pra frente se estiver por baixo
+                notifyIconFrm1.Visible = false;            // Some da barra de notificação
+
+                swtEstReservado.Checked = false;
+                swtEstReservadoItens.Checked = false;
+                swtUserLinear.Checked = false;
+                swtUtilizaInnodb.Checked = false;
+                swtUtilizaMyIsam.Checked = false;
+            }
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.ShowInTaskbar = false;
+                notifyIconFrm1.Visible = true;
+                this.Hide();
+            }
+        }
+        // Mesmo código do "Restaurar", não consegui só chamar o método
+        private void notifyIconFrm1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Show();                                   // Mostra o form
+            this.WindowState = FormWindowState.Normal;    // Garante estado normal
+            this.ShowInTaskbar = true;                   // Volta para a barra de tarefas
+            this.BringToFront();                        // Traz pra frente se estiver por baixo
+            notifyIconFrm1.Visible = false;            // Some da barra de notificação
+
+            swtEstReservado.Checked = false;
+            swtEstReservadoItens.Checked = false;
+            swtUserLinear.Checked = false;
+            swtUtilizaInnodb.Checked = false;
+            swtUtilizaMyIsam.Checked = false;
+        }
     }
 } //-- Fim do Código </>
